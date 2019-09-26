@@ -1,6 +1,6 @@
 # Event Teams
 Torch Plugin to auto assign factions for events, recommended use is on event servers.
-Stores a list of the assignable factions in a List.
+Stores a list of the assignable factions in a List. Factions have to be set to accept everyone for this plugin to work
 ## Plugin Commands
 1. !et join
     * Permission: Everyone
