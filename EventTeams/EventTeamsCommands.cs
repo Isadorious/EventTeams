@@ -240,5 +240,30 @@ namespace EventTeams
             }
         }
 
+        [Command("empty", "empties the specified faction of everyone but its founder")]
+        [Permission(MyPromoteLevel.Admin)]
+        public void FactionEmpty(string tag)
+        {
+            IMyFaction targetFaction = MyAPIGateway.Session.Factions.TryGetFactionByTag(tag);
+
+            if (targetFaction != null)
+            {
+                foreach (var member in targetFaction.Members)
+                {
+                    if (!member.Value.IsFounder)
+                    {
+                        MyAPIGateway.Session.Factions.KickMember(targetFaction.FactionId, member.Value.PlayerId);
+                    }
+                }
+
+                Context.Respond("Purged Faction: " + tag);
+            }
+            else
+            {
+                Context.Respond("Faction tag couldn't be found");
+            }
+
+        }
+
     }
 }
