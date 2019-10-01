@@ -273,9 +273,41 @@ namespace EventTeams
                 Plugin.Save();
                 Context.Respond("Faction removed");
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Context.Respond("Faction :: " + Tag + " :: doesn't exist!");
+            }
+        }
+
+        [Command("pc", "provides a count of the members in each faction")]
+        [Permission(MyPromoteLevel.Admin)]
+        public void FactionPlayerCount()
+        {
+            // Work out which faction to assign player (one with least amount of players)
+            var pairs = new List<KeyValuePair<string, int>>();
+
+            foreach (string Tag in Plugin.Config.FactionTags)
+            {
+                try
+                {
+                    IMyFaction tempFaction = MyAPIGateway.Session.Factions.TryGetFactionByTag(Tag);
+                    int playerCount = tempFaction.Members.Count;
+
+                    var pair = new KeyValuePair<string, int>(Tag, playerCount);
+
+                    pairs.Add(pair);
+                }
+                catch (Exception)
+                {
+                    Plugin.Logger.Warn(Tag + " doesn't exist!");
+                }
+
+            }
+
+            Context.Respond("Players in each faction: ");
+            foreach (var pair in pairs)
+            {
+                Context.Respond("Faction: " + pair.Key + " Players: " + pair.Value);
             }
         }
 
