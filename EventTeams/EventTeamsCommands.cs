@@ -60,21 +60,12 @@ namespace EventTeams
 
                 IMyFaction targetFaction = MyAPIGateway.Session.Factions.TryGetFactionByTag(minFactionPair.Key);
 
-                if (targetFaction.AutoAcceptMember)
-                {
-                    MyAPIGateway.Session.Factions.SendJoinRequest(targetFaction.FactionId, Context.Player.IdentityId); // Adds player to faction
+                MyAPIGateway.Session.Factions.SendJoinRequest(targetFaction.FactionId, Context.Player.IdentityId); // Adds player to faction
+                MyAPIGateway.Session.Factions.AcceptJoin(targetFaction.FactionId, Context.Player.IdentityId); // Accept player to faction
 
-                    // Report back to player
-                    Context.Respond("Added to faction: " + minFactionPair.Key);
-                    Plugin.Logger.Info("Assigned " + Context.Player.DisplayName + " to faction " + targetFaction.Tag);
-                }
-                else
-                {
-                    Context.Respond("Unable to assign faction, not set to accept everyone");
-                    Plugin.Logger.Warn(targetFaction.Tag + " not set to accept everyone");
-                }
-
-               
+                // Report back to player
+                Context.Respond("Added to faction: " + minFactionPair.Key);
+                Plugin.Logger.Info("Assigned " + Context.Player.DisplayName + " to faction " + targetFaction.Tag);
 
 
             }
