@@ -1,0 +1,1 @@
+copy-item -path "E:\Files\OneDrive\repos\EventTeams\EventTeams\bin\Release\*" -Destination "E:\Files\Documents\Torch\Plugins\EventTeams" -force
