@@ -189,7 +189,7 @@ namespace EventTeams
             Context.Respond("Kicked player from faction");
         }
 
-        [Command("check","checks if the factions set in the config are able to be joined")]
+        [Command("check", "checks if the factions set in the config are able to be joined")]
         [Permission(MyPromoteLevel.Admin)]
         public void FactionCheck()
         {
@@ -206,24 +206,46 @@ namespace EventTeams
 
                     pairs.Add(pair);
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     Context.Respond("Faction :: " + Tag + " :: doesn't exist!");
                 }
 
             }
 
-            foreach(var pair in pairs)
+            foreach (var pair in pairs)
             {
                 if (pair.Value)
                     Context.Respond(pair.Key + " :: READY");
                 else
-                    Context.Respond(pair.Key + " :: NOT READY");
+                    Context.Respond(pair.Key + " :: NOT READY. Enable Accept Everyone.");
 
             }
         }
 
-        [Command("add","add new faction to list of assignable factions")]
+        [Command("fix","attempts to switch factions to accept everyone")]
+        [Permission(MyPromoteLevel.Admin)]
+        public void FactionFix()
+        {
+            foreach (string Tag in Plugin.Config.FactionTags)
+            {
+                try
+                {
+                    IMyFaction tempFaction = MyAPIGateway.Session.Factions.TryGetFactionByTag(Tag);
+
+                    MySession.Static.Factions.ChangeAutoAccept(tempFaction.FactionId, Context.Player.IdentityId, true, false);
+
+                }
+                catch (Exception e)
+                {
+                    Context.Respond("Faction :: " + Tag + " :: doesn't exist!");
+                }
+            }
+
+            Context.Respond("Attempted to force factions to accept everyone");
+        }
+
+        [Command("add", "add new faction to list of assignable factions")]
         [Permission(MyPromoteLevel.Admin)]
         public void FactionAdd(string Tag)
         {
@@ -234,13 +256,13 @@ namespace EventTeams
                 Plugin.Save();
                 Context.Respond("Faction added");
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Context.Respond("Faction :: " + Tag + " :: doesn't exist!");
             }
         }
 
-        [Command("remove","remove a faction from the list of assignable factions")]
+        [Command("remove", "remove a faction from the list of assignable factions")]
         [Permission(MyPromoteLevel.Admin)]
         public void FactionRemove(string Tag)
         {
