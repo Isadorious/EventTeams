@@ -63,7 +63,6 @@ namespace EventTeams
                 if (targetFaction.AutoAcceptMember)
                 {
                     MyAPIGateway.Session.Factions.SendJoinRequest(targetFaction.FactionId, Context.Player.IdentityId); // Adds player to faction
-                    MyAPIGateway.Session.Factions.AcceptJoin(targetFaction.FactionId, Context.Player.IdentityId); // Accepts player to faction
 
                     // Report back to player
                     Context.Respond("Added to faction: " + minFactionPair.Key);
