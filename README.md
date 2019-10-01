@@ -15,8 +15,8 @@ Stores a list of the assignable factions in a List. Factions have to be set to a
     * Permission: Admin
     * Adds the faction with the specified tag to the list of assignable factions
 5. !et remove [FactionTag]
-    *Permission: Admin
-    * Removes the faction with the specified tag from the list of assignable factions
-6. !et check
     * Permission: Admin
-    * Checks if the factions in the list do exist and if they are set to accept everyone
+    * Removes the faction with the specified tag from the list of assignable factions
+6. !et empty [FactionTag]
+    * Permission: Admin
+    * Removes all members but the founder from the specified faction
