@@ -84,6 +84,72 @@ namespace EventTeams
             }
         }
 
+        [Command("forcejoin", "force a player to join a faction")]
+        [Permission(MyPromoteLevel.Admin)]
+        public void FactionForceJoin(string PlayerName)
+        {
+            long id = 0;
+
+            foreach (var identity in MySession.Static.Players.GetAllIdentities())
+            {
+                if (identity.DisplayName == PlayerName)
+                {
+                    id = identity.IdentityId;
+                }
+            }
+
+            // Check if player is already in a faction
+            var playerFaction = MyAPIGateway.Session.Factions.TryGetPlayerFaction(id);
+
+            if (playerFaction != null)
+            {
+                Context.Respond(PlayerName + " is already in a faction!");
+                return;
+            }
+
+            // Work out which faction to assign player (one with least amount of players)
+            var pairs = new List<KeyValuePair<string, int>>();
+
+            foreach (string Tag in Plugin.Config.FactionTags)
+            {
+                try
+                {
+                    IMyFaction tempFaction = MyAPIGateway.Session.Factions.TryGetFactionByTag(Tag);
+                    int playerCount = tempFaction.Members.Count;
+
+                    var pair = new KeyValuePair<string, int>(Tag, playerCount);
+
+                    pairs.Add(pair);
+                }
+                catch (Exception)
+                {
+                    Plugin.Logger.Warn(Tag + " doesn't exist!");
+                }
+
+            }
+
+            var minFactionPair = pairs.MinBy(e => e.Value);
+
+            // Put player in faction
+
+            IMyFaction targetFaction = MyAPIGateway.Session.Factions.TryGetFactionByTag(minFactionPair.Key);
+
+            if (targetFaction.AutoAcceptMember)
+            {
+                MyAPIGateway.Session.Factions.SendJoinRequest(targetFaction.FactionId, id); // Adds player to faction
+
+                // Report back to player
+                Context.Respond("Added " +PlayerName+ " to faction: " + minFactionPair.Key);
+                
+                Plugin.Logger.Info("Assigned " + Context.Player.DisplayName + " to faction " + targetFaction.Tag);
+            }
+            else
+            {
+                Context.Respond("Unable to assign faction, not set to accept everyone");
+                Plugin.Logger.Warn(targetFaction.Tag + " not set to accept everyone");
+            }
+        }
+
         [Command("reload", "This command will reload the config for Faction Assigner")]
         [Permission(MyPromoteLevel.Admin)]
         public void FactionReload()
