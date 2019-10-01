@@ -20,3 +20,6 @@ Stores a list of the assignable factions in a List. Factions have to be set to a
 6. !et empty [FactionTag]
     * Permission: Admin
     * Removes all members but the founder from the specified faction
+7. !et pc
+    * Permission: Admin
+    * Provides a member count for each assignable faction 
