@@ -33,6 +33,12 @@ namespace EventTeams
                     return;
                 }
 
+                if(Context.Player.PromoteLevel > MyPromoteLevel.None)
+                {
+                    Context.Respond("You need to join a faction manually");
+                    return;
+                }
+
                 // Work out which faction to assign player (one with least amount of players)
                 var pairs = new List<KeyValuePair<string, int>>();
 
@@ -87,6 +93,7 @@ namespace EventTeams
                 {
                     id = identity.IdentityId;
                 }
+
             }
 
             // Check if player is already in a faction
@@ -95,6 +102,12 @@ namespace EventTeams
             if (playerFaction != null)
             {
                 Context.Respond(PlayerName + " is already in a faction!");
+                return;
+            }
+
+            if (Context.Player.PromoteLevel > MyPromoteLevel.None)
+            {
+                Context.Respond("You need to join a faction manually");
                 return;
             }
 
