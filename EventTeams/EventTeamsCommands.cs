@@ -12,7 +12,7 @@ using VRage.ModAPI;
 namespace EventTeams
 {
 
-    [Category("et")]
+    [Category("teams")]
     public class EventTeamsCommands : CommandModule
     {
         public EventTeams Plugin => (EventTeams)Context.Plugin;
