@@ -220,7 +220,7 @@ namespace EventTeams
             }
         }
 
-        [Command("pc", "provides a count of the members in each faction")]
+        [Command("count", "provides a count of the members in each faction")]
         [Permission(MyPromoteLevel.Admin)]
         public void FactionPlayerCount()
         {
